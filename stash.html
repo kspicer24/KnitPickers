@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style type="text/css">
+    form.boxed {
+        padding: 1em 0;
+        border: 5px solid purple;
+        }
+            hr.solid {
+        border-top: 2px solid purple
+    }
+</style>
+<body>
+<h1 style="color:purple;">Knit Pickers</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3 style="color: red">{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <p style="text-align: center;"><a href="/">Home</a> | <a href="/profile">My Profile</a> | My Stash | <a href="/queue">My Queue</a></p>
+    <h2>{{ session['name_of_user'] }}'s Stash</h2>
+    <form class="boxed" name="add_yarn" method="POST">
+            <h3>Add yarn to your stash</h3>
+            <hr class="solid"/>
+            <label>Brand: </label>
+            <input type="text" name="yarn_brand" />
+            <label>Style: </label>
+            <input type="text" name="yarn_style" />
+            <label>Colorway: </label>
+            <input type="text", name="yarn_color"/>
+
+            <input type="submit" name="add_to_stash">
+
+    </form>
+    <h3>Your stash:</h3>
+    <ul id="stash_yarn_list">
+        {% for each in stash %}
+          <li>{{ each }}
+              <form method="post">
+                  <input type="submit" name="delete_from_stash" value="Remove"/>
+                  <input type="hidden" name="yarnInfo" value="{{ each.brand }}|{{ each.style }}"/>
+
+              </form>
+          </li>
+
+        {% endfor %}
+    </ul>
+
+
+</body>
+</html>

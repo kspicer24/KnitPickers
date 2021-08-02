@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1 style="color:purple;">Knit Pickers</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3 style="color: red">{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<p style="text-align: center;"><a href="/">Home</a> | <a href="/profile">My Profile</a> | <a href="/stash">My Stash</a>
+    | My Queue</p>
+<h2>{{ session['name_of_user'] }}'s Queue</h2>
+
+<ol>
+    <hr class="solid"/>
+    {% for pattern in patterns %}
+    <li>
+        <p>
+            <a href="{{ pattern.url }}" target="_blank">{{ pattern.name }}</a>
+        <form method="post">
+            <input type="submit" name="remove_from_queue" value="Remove"/>
+            <input type="hidden" name="patternInfo" value="{{ pattern.pid }}"/>
+        </form>
+        </p>
+        <p>
+            {{ pattern.stitch }} {{ pattern.category }}
+        </p>
+        <a href="{{ url_for('viewPattern', pattID=pattern.pid) }}">Check out the details and join the conversation</a>
+
+        <hr class="solid">
+
+    </li>
+    {% endfor %}
+</ol>
+</body>
+</html>

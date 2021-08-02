@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style type="text/css">
+
+    hr.solid {
+        border-top: 3px solid purple
+    }
+</style>
+<script>
+    function toggle_display(f){
+        b = document.getElementById(f);
+        if (b.style.display == 'none'){
+            b.style.display = 'block'
+        }else{
+            b.style.display = 'none'
+        }
+        return
+        }
+    function reset_desc(){
+        var b = document.getElementById('text_desc').value;
+        document.getElementById('pat_desc').value = b;
+
+        return
+        }
+
+</script>
+<body>
+<h1 style="color:purple;">Knit Pickers</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3 style="color: red">{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+{% if 'username' in session %}
+<p style="text-align: center;"><a href="/">Home</a> | <a href="/profile">My Profile</a> | <a href="/stash">My Stash</a>
+    | <a href="/queue">My Queue</a></p>
+{% else %}
+<p style="text-align: center;"><a href="/">Home</a></p>
+{% endif %}
+<h1>{{ pattern.name }}</h1>
+<p>{{ pattern.stitch }} | {{ pattern.category }}</p>
+<h3>Description:</h3>
+            <p style="display: block" id="pat_desc">{{ pattern.description }}</p>
+        {% if 'username' in session and session['username'] == pattern.poster %}
+        <form style="display: none" method="post" id="edit_description_form">
+        <textarea rows="10" cols="100" id="text_desc" name="text_description" placeholder="{{ pattern.description }}"></textarea>
+
+            <input type="submit" name="submit_description"/>
+        </form>
+            <button name="change_description" value="edit description" onclick="toggle_display('edit_description_form'), toggle_display('pat_desc'), reset_desc()"> Edit Description </button>
+
+        {% endif %}
+
+
+
+{% if yarns|length != 0 %}
+<h3>Yarn Used:</h3>
+{% endif %}
+<p>
+<ul>
+    {% for yarn in yarns %}
+    <li>{{ yarn }}</li>
+    {% endfor %}
+</ul>
+</p>
+<p>Posted by: {{ pattern.poster }}</p>
+<a href='{{ pattern.url }}' target="_blank"> View Pattern Here</a>
+{% if 'username' in session %}
+<form method="post">
+    <input type="submit" value="Add to Queue" name="add_to_queue"/>
+</form>
+{% endif %}
+<hr class="solid">
+<h3>Comments</h3>
+{% if 'username' in session %}
+<button onclick="toggle_display('add_comment_form')">Add a Comment!</button>
+<form style="display: none" id="add_comment_form" name="comment_form" method="post">
+    <p>
+        <textarea rows="10" cols="100" name="text_description" placeholder="enter your description here"></textarea>
+    </p>
+    <input type="submit" name="post_comment" value="post">
+</form>
+{% endif %}
+<fieldset>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>
+                {{ comment.date }} | {{ comment.user }}
+                {% if comment.user == session['username'] %}
+            <form method="post">
+                <input type="submit" name="delete_comment" value="Delete Comment">
+                <input type="hidden" name="comment" value="{{ comment.comment }}"/>
+            </form>
+            {% endif %}
+
+            <p>
+                {{ comment.comment }}
+            </p>
+        </li>
+        {% endfor %}
+    </ul>
+
+</fieldset>
+
+</body>
+</html>

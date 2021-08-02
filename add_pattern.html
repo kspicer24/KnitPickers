@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a pattern</title>
+</head>
+<style type="text/css">
+    form {
+        border: 3px solid purple
+        }
+    hr.solid {
+        border-top: 2px solid purple
+    }
+
+</style>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3 style="color: red">{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+<h1 style="color:purple;">Knit Pickers</h1>
+<h3>Add your pattern</h3>
+<form name="add_pattern_form" method="post">
+    <p>
+        <label>Unique Pattern Name: </label>
+        {% if 'pName' in session %}
+            <input type="text" name="pattern_name" value="{{ session['pName'] }}"/>
+        {% else %}
+            <input type="text" name="pattern_name"/>
+        {% endif %}
+    </p>
+    <p>
+        <label>Stitch Type </label>
+        <select id="stitch_type" name="stitch_type">
+            <option value="none">--select option--</option>
+            <option value="Knit">Knit</option>
+            <option value="Crochet">Crochet</option>
+            {% if 'stitch' in session %}
+                <script>
+                    function setSelectedIndex(s, valsearch){
+                        for (i = 0; i< s.options.length; i++){
+                            if (s.options[i].value == valsearch){
+                                s.options[i].selected = true;
+                                break;
+                            }
+                        }
+                        return;
+                    }
+                    setSelectedIndex(document.getElementById('stitch_type'), "{{ session['stitch'] }}");
+                </script>
+            {% endif %}
+        </select>
+        <label>Finished Product Category </label>
+        {% if 'category' in session %}
+            <input type="text" name="category" value="{{ session['category'] }}"/>
+        {% else %}
+            <input type="text" name="category"/>
+        {% endif %}
+    </p>
+    <hr class="solid">
+    <p>
+        <label>Brand of yarn used</label>
+        <input type="text" name="yarn_brand"/>
+        <label>Style of yarn used</label>
+        <input type="text" name="yarn_style"/>
+    </p>
+
+    <input type="submit" name="add_yarn_to_pattern" value="Add Yarn"/>
+    <p>
+        <label> Yarn used: </label>
+    <ul>
+        {% for item in yarns %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    <hr class="solid">
+    <p>
+        <label>Input the link to your pattern: </label>
+        <input type="url" name="site_url">
+    </p>
+
+    <label>Add a text description</label>
+    <p>
+        <textarea rows="10" cols="100" name="text_description" placeholder="enter your description here"></textarea>
+    </p>
+    <input type="submit" name="submit_form" value="Add pattern">
+    <input type="submit" name="cancel_form" value="Cancel">
+</form>
+</body>
+</html>

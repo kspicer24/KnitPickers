@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Knit Pickers</title>
+    <meta name="description" content="a site to find all of your favorite patterns">
+    <meta name="author" content="Kristi :)">
+</head>
+<style type="text/css">
+
+    hr.solid {
+        border-top: 2px solid purple
+    }
+    li.bigger {
+        font:15px
+    }
+
+</style>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3 style="color: red">{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <h1 style="color:purple;">Knit Pickers</h1>
+    {% if login %}
+    You are logged in as <strong>{{session['username']}}</strong>
+    <a href={{url_for('logout')}}>logout</a>
+    <p style="text-align: center;">
+        Home |
+        <a href="/profile">My Profile</a> |
+        <a href="/stash">My Stash</a> |
+        <a href="/queue">My Queue</a>
+
+    </p>
+    {%else%}
+    <a href={{url_for('login')}}>Login</a>
+    {%endif%}
+
+    <form name="filters" method="POST">
+            <hr class="solid"/>
+            <h3>Filter patterns</h3>
+            <p>
+                <label>Stitch Type</label>
+                <select name="stitch_type" id="pattern_type_select">
+                    <option value="0">select option</option>
+                    <option value="1">Knit</option>
+                    <option value="2">Crochet</option>
+
+                </select>
+
+                <label>Pattern Category</label>
+                <select name="category_type" id="pattern_category_select">
+                    {% for cat in categories %}
+                    <option value="{{ cat }}">{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+
+            {% if login %}
+                <p>
+                    <label>Search according to your stash: </label>
+                    <select name="yarn_select" id="yarn_stash_select">
+                        {% for item in stash_yarn %}
+                            <option value='{{ item[0] }}|{{ item[1] }}'>{{ item[0] }}|{{ item[1] }}</option>
+
+                        {% endfor %}
+                    </select>
+                </p>
+            {% endif %}
+            <p>
+                <input type="submit" name="filter_results" value="Apply">
+            </p>
+
+    </form>
+        <hr class="solid"/>
+    {% if login %}
+        <a href="/add_pattern">Add a pattern</a>
+    {% endif %}
+
+    <ol>
+        {% for pattern in patterns %}
+        <li>
+            <p>
+                <a href="{{ pattern.url }}" target="_blank">{{ pattern.name }}</a>
+            </p>
+            <p>
+                {{ pattern.stitch }}  {{ pattern.category }}
+            </p>
+            <a href="{{ url_for('viewPattern', pattID=pattern.pid) }}">Check out the details and join the conversation</a>
+
+                <hr class="solid">
+
+        </li>
+
+        {% endfor %}
+    </ol>
+
+
+</body>
+</html>

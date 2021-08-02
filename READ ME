@@ -1,0 +1,100 @@
+____________________________README____________________________
+
+This project is a MySQL database with a web API acting as the front end.
+The web API was built using python-flask, html, css, and javascript.
+
+_______________________Installation Instructions______________________
+
+This project requires the installation of the following
+    1. Python
+    2. Python's flask library
+    3. flask's mysql extension
+    4. pymysql
+
+Flask can be downloaded through the project settings via PyCharm
+    look for Flask-1.1.2 and Flask_MySQL-1.5.1 under Project/Python Interpreter in file/settings
+
+To run follow the following steps:
+
+    1. set up the database provided in the included dump
+
+    2. adjust the MySQL database info in the file named app.py
+        - comments signify where this is done (lines 10-13)
+
+    3. run the project using the command $ python -m flask run from the directory where the python application files are stored
+
+    4. click the link given to the localhost server.
+        as an example, the given link on my server is http://127.0.0.1:5000/
+        - This should open a browser page that will run the website
+
+
+_____________________________Functionality_____________________________
+
+This application allows users to store/share knit and crochet patterns as well as comment on them, save them in a queue,
+ and filter them based on the type of stitch, category of finished product, and yarn they hold in their personal stash.
+
+All users (registered or not) are able to access patterns stored in the database and filter based on stitch type
+(knit/crochet) and category (hat, scarf, etc.).
+
+Registered users have access to additional features including the ability to add patterns, comment on patterns,
+add patterns to their personal queue, add yarn to their personal stash, and filter patterns based on the yarn in their stash.
+
+____________________________CRUD operations____________________________
+
+Create
+    the application allows for the creation of the following:
+        1. Accounts (user_member table)
+            represented by username and password
+            accessed by clicking log in on the home screen, and then
+                create an account
+        2. Patterns (pattern table)
+            accessible to registered users through a link on the home page
+                labeled 'add a pattern'
+        3. yarn to their stash (stashes table)/(yarn table)
+            adds yarnID to stash table associated with their username
+            also adds yarn to yarn table if it didn't previously exist
+        4. yarn to a pattern (uses table)
+            add yarn to a pattern to allow others to filter by yar from the home page
+            accessible from the 'add a pattern' page
+        5. patterns to their queue (queues table)
+            adds patternID to queues in database along with their username
+            accessible by clicking link 'check out the details and join the conversation'
+        6. comments to a pattern (comments_on table)
+            adds a comment by that user to a specific pattern in comments_on
+            accessible by clicking link 'check out the details and join the conversation'
+                and clicking 'add a comment!'
+
+Read
+    the application reads the following information from the database
+        1. patterns
+           seen on the main screen, in My Queue, and View Pattern
+        2. Yarn
+seen on the main screen (drop down list for stashed yarn) My Stash, Add Pattern, and View Pattern
+        3. user details
+            seen with login and logout
+        4. queues
+            seen in My Queue
+        5. stash
+            seen in My Stash and main screen drop down menu
+
+Update
+    the application allows for updates in the following way
+        1. users can update their description by clicking ‘edit description’ when viewing the pattern
+		Only the user that uploaded the pattern can do this
+
+        There aren't any other true updates provided.  I didn't feel they would
+        make much sense. Users can still update their stashes and queues, though
+        from the database perspective these operations are technically creations
+        and deletions.
+
+Delete
+    the application allows for deletion in the following ways
+        1. patterns
+            delete from database entirely by clicking ‘delete’ on the pattern listed in My Profile
+		Only the user that created the pattern can do this
+            delete from queue by clicking ‘remove’ on the pattern listed in My Queue
+        2. yarn
+            delete from stash by clicking ‘delete’ in My Stash
+        3. Comments
+            delete from pattern by clicking ‘delete’ on the comment while viewing the pattern it referenced
+	            Only the user that posted the comment can delete
